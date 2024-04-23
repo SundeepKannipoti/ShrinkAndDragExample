@@ -10,29 +10,26 @@ Window {
 
     Rectangle{
         id: id_main_rect
-
         anchors.fill: parent
         color: "black"
 
         Rectangle{
             id: id_small_rect
-
-            property real minX: id_main_rect.x
-            property real maxX: id_main_rect.x + id_main_rect.width - id_small_rect.width
-            property real minY: id_main_rect.y
-            property real maxY: id_main_rect.y + id_main_rect.height - id_small_rect.height
-
             width: id_main_rect.width/4
             height: id_main_rect.height/4
             color: "red"
             state: "unshrink"
-
 
             MouseArea{
                 id: id_small_rect_mouse_area
                 property string shrink_state: "unshrink"
                 anchors.fill: parent
                 drag.target: id_main_rect.state === "edit_on" ? parent : null
+                drag.minimumX: id_main_rect.x
+                drag.maximumX: id_main_rect.x + id_main_rect.width - id_small_rect.width
+                drag.minimumY: id_main_rect.y
+                drag.maximumY: id_main_rect.y + id_main_rect.height - id_small_rect.height
+
                 onPressAndHold: {
                     id_main_rect.state = "edit_on"
                     id_small_rect.state = "shrink"
@@ -40,12 +37,6 @@ Window {
                 onReleased: {
                     id_main_rect.state = "edit_off"
                     id_small_rect.state = "unshrink"
-                }
-                onPositionChanged: {
-                    if(id_main_rect.state === "edit_on"){
-                        id_small_rect.x = Math.max(minX,Math.min(maxX, mouse.x - id_small_rect.width/2))
-                        id_small_rect.y = Math.max(minY,Math.min(maxY, mouse.y - id_small_rect.height/2))
-                    }
                 }
             }
 
@@ -66,10 +57,6 @@ Window {
                     PropertyAnimation{ property: "scale"; duration: 300; easing.type: Easing.Linear}
                 }
             ]
-            Component.onCompleted:{
-                console.log("small rect completed")
-                console.log("id_small_rect.minX: ",id_small_rect.minX)
-            }
         }
 
         state: "edit_off"
@@ -84,6 +71,5 @@ Window {
                 PropertyChanges{ target: id_main_rect; color: "black"}
             }
         ]
-        Component.onCompleted: console.log("main rect completed")
     }
 }
