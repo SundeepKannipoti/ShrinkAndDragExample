@@ -24,12 +24,13 @@ Window {
                 id: id_small_rect_mouse_area
                 property string shrink_state: "unshrink"
                 anchors.fill: parent
-                drag.target: id_main_rect.state === "edit_on" ? parent : null
-                drag.minimumX: id_main_rect.x
-                drag.maximumX: id_main_rect.x + id_main_rect.width - id_small_rect.width
-                drag.minimumY: id_main_rect.y
-                drag.maximumY: id_main_rect.y + id_main_rect.height - id_small_rect.height
-
+                drag{
+                    target: id_main_rect.state === "edit_on" ? parent : null
+                    minimumX: id_main_rect.x * 0.8
+                    maximumX: id_main_rect.x + id_main_rect.width - id_small_rect.width
+                    minimumY: id_main_rect.y * 0.8
+                    maximumY: id_main_rect.y + id_main_rect.height - id_small_rect.height
+                }
                 onPressAndHold: {
                     id_main_rect.state = "edit_on"
                     id_small_rect.state = "shrink"
